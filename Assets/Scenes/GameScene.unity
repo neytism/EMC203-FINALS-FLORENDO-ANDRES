@@ -152,8 +152,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1253449758}
   - {fileID: 1714300521}
+  - {fileID: 1253449758}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &55256970
@@ -2652,7 +2652,7 @@ GameObject:
   - component: {fileID: 1253449758}
   - component: {fileID: 1253449759}
   m_Layer: 0
-  m_Name: Player1Goal
+  m_Name: Player2Goal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2685,7 +2685,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b39ec7cc73bdcfb4186b3d6f7442be6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _paddle: {fileID: 0}
+  _paddle: {fileID: 1896681205}
   _ball: {fileID: 336807099}
   viewAngleRange: 180
 --- !u!1 &1272022352
@@ -3103,7 +3103,7 @@ GameObject:
   - component: {fileID: 1714300521}
   - component: {fileID: 1714300522}
   m_Layer: 0
-  m_Name: Player2Goal
+  m_Name: Player1Goal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3136,7 +3136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b39ec7cc73bdcfb4186b3d6f7442be6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _paddle: {fileID: 0}
+  _paddle: {fileID: 1924265382}
   _ball: {fileID: 336807099}
   viewAngleRange: 180
 --- !u!1 &1746277627
@@ -3557,8 +3557,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a62b1b73243bb774ab40929bf9eb9624, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveUpKey: 119
-  moveDownKey: 115
+  moveUpKey: 273
+  moveDownKey: 274
 --- !u!114 &1896681205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3574,6 +3574,7 @@ MonoBehaviour:
   _speed: 5
   _size: 5
   _acceleration: 2
+  _scoreText: {fileID: 2022311239}
 --- !u!212 &1896681206
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3858,6 +3859,7 @@ MonoBehaviour:
   _speed: 5
   _size: 5
   _acceleration: 2
+  _scoreText: {fileID: 73128296}
 --- !u!1 &1929127798
 GameObject:
   m_ObjectHideFlags: 0

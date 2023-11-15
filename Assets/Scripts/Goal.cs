@@ -15,6 +15,7 @@ public class Goal : MonoBehaviour
         if (IsBallPass())
         {
             _ball.ResetBall();
+            _paddle.IncreaseScore();
         }
     }
     
