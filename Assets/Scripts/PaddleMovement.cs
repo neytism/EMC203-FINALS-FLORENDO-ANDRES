@@ -13,6 +13,8 @@ public class PaddleMovement : MonoBehaviour
     private float _currentSpeed = 0f;
     private Vector3 _lastPosition;
 
+    public Vector3 velocity;
+
     private void Start()
     {
         _paddle = GetComponent<Paddle>();
@@ -22,28 +24,35 @@ public class PaddleMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        _lastPosition = _player.transform.position; // Store the last position first
+        Move(_paddle.Size);
+        velocity = Velocity();
+        
+    }
+
+    private void Move(int size)
+    {
+        
         Vector3 newScale = new Vector3(_player.transform.localScale.x, _paddle.Size, _player.transform.localScale.z);
         _player.transform.localScale = newScale;
     
         float targetSpeed = _input.InputY * (_paddle.Speed * 20);
+        
         _currentSpeed = Mathf.MoveTowards(_currentSpeed, targetSpeed, (_paddle.Acceleration * 100) * Time.deltaTime);
-
-        Move(_currentSpeed, _paddle.Size);
-    }
-
-    private void Move(float moveY, int size)
-    {
-        Vector3 newPosition = _player.transform.position + new Vector3(0, moveY, 0) * Time.deltaTime;
+        
+        Vector3 newPosition = _player.transform.position + new Vector3(0, _currentSpeed, 0) * Time.deltaTime;
 
         float adjustedMinY = _minY + size / 2.0f;
         float adjustedMaxY = _maxY - size / 2.0f;
     
         newPosition.y = Mathf.Clamp(newPosition.y, adjustedMinY, adjustedMaxY);
     
+        if (newPosition.y <= adjustedMinY || newPosition.y >= adjustedMaxY)
+        {
+            _currentSpeed = 0f;
+        }
+        
         _player.transform.position = newPosition;
-    
-        // Store the last position for velocity calculation
-        _lastPosition = _player.transform.position;
     }
 
     public Vector3 Velocity()
