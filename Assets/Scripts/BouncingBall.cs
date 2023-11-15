@@ -1,11 +1,17 @@
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class BouncingBall : MonoBehaviour
 {
+    public static event Action GameLoaded;
     public float speed = 5f;
+    
+    public float angleLimitY = 0.1f;
+    public float angleLimitX = 0.1f;
+    
     private Vector2 direction = new Vector2(1, 1);
 
     public float screenMinX;
@@ -18,7 +24,24 @@ public class BouncingBall : MonoBehaviour
 
     [SerializeField] private bool _canMove = false;
 
+
+    private void OnEnable()
+    {
+        GameManager.GameReadyEvent += StartBounce;
+        UIManager.RestartGameEvent += ResetBall;
+    }
+    
+    private void OnDisable()
+    {
+        GameManager.GameReadyEvent -= StartBounce;
+        UIManager.RestartGameEvent -= ResetBall;
+    }
     private void Start()
+    {
+        GameLoaded?.Invoke();
+    }
+
+    private void StartBounce()
     {
         StartCoroutine(BallCountDown());
     }
@@ -42,8 +65,8 @@ public class BouncingBall : MonoBehaviour
         CheckBounce(screenMaxX, screenMinX, Vector2.right);
 
         // Check for collision with players using AABB
-        CheckCollisionWithPlayer(player1.transform, player1.Velocity());
-        CheckCollisionWithPlayer(player2.transform, player2.Velocity());
+        if(player1 != null) CheckCollisionWithPlayer(player1.transform, player1.Velocity());
+        if(player2 != null) CheckCollisionWithPlayer(player2.transform, player2.Velocity());
     }
 
     void CheckBounce(float max, float min, Vector2 normal)
@@ -54,7 +77,12 @@ public class BouncingBall : MonoBehaviour
             float dot = Vector2.Dot(direction, normal);
             direction = direction - 2 * dot * normal;
             
-            direction.y = Mathf.Clamp(direction.y, -0.9f, 0.9f);
+            direction.y = Mathf.Clamp(direction.y, -0.7f, 0.7f);
+
+            if (Mathf.Abs(direction.x) < angleLimitX)
+            {
+                direction.x = Mathf.Sign(direction.x) * angleLimitX;
+            }
 
             // Correct position if out of bounds
             if (normal == Vector2.up)
@@ -95,6 +123,11 @@ public class BouncingBall : MonoBehaviour
             
             direction.y = Mathf.Clamp(direction.y, -0.9f, 0.9f); //limit  he angle and speed
 
+            if (Mathf.Abs(direction.x) < angleLimitX)
+            {
+                direction.x = Mathf.Sign(direction.x) * angleLimitX;
+            }
+
             // Correct position if inside the player
             if (normal == Vector2.up || normal == Vector2.down)
             {
@@ -109,7 +142,14 @@ public class BouncingBall : MonoBehaviour
 
     private void RandomizeDirection()
     {
-        direction = new Vector2(Random.Range(-0.9f, 0.9f), Random.Range(-0.5f, 0.5f));
+        direction = new Vector2(Random.Range(-0.9f, 0.9f), Random.Range(-0.4f, 0.4f));
+        
+        direction.y = Mathf.Clamp(direction.y, -0.9f, 0.9f); 
+
+        if (Mathf.Abs(direction.x) < angleLimitX)
+        {
+            direction.x = Mathf.Sign(direction.x) * angleLimitX;
+        }
     }
 
     IEnumerator BallCountDown()
@@ -118,6 +158,8 @@ public class BouncingBall : MonoBehaviour
         RandomizeDirection();
         _canMove = true;
     }
+    
+   
 
     public void ResetBall()
     {

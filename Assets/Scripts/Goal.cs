@@ -57,5 +57,4 @@ public class Goal : MonoBehaviour
         return v;
     }
     
-    
 }

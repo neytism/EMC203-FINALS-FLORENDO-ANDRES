@@ -6,13 +6,17 @@ using UnityEngine;
 
 public class Paddle : MonoBehaviour
 {
+    public static event Action<int,int> UpdateScoreEvent;
+    
+    [SerializeField] private int _playerNumber = 1;
+
+    public int PlayerNumber => _playerNumber;
+
     [SerializeField] private float _speed = 5f;
     
     [SerializeField] private int _size = 5;
     
     [SerializeField] private float _acceleration = 2f;
-
-    [SerializeField] private TextMeshProUGUI _scoreText;
 
     private int _score = 0;
     
@@ -27,7 +31,23 @@ public class Paddle : MonoBehaviour
     public void IncreaseScore()
     {
         _score++;
-        _scoreText.text = _score.ToString();
+        UpdateScoreEvent?.Invoke(_playerNumber,_score);
+    }
+
+    private void OnEnable()
+    {
+        UIManager.RestartGameEvent += ResetScore;
+    }
+    
+    private void OnDisable()
+    {
+        UIManager.RestartGameEvent -= ResetScore;
+    }
+
+    private void ResetScore()
+    {
+        _score = 0;
+        UpdateScoreEvent?.Invoke(_playerNumber,_score);
     }
     
     

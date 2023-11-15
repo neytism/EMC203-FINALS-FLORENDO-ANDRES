@@ -6,7 +6,8 @@ using UnityEngine;
 public class PaddleMovement : MonoBehaviour
 {
     [SerializeField] private GameObject _player;
-    [SerializeField] private PlayerInput _input;
+    [SerializeField] private PlayerInput _playerInput;
+    [SerializeField] private AiInput _aiInput;
     [SerializeField] private float _minY, _maxY;
     private Paddle _paddle;
 
@@ -19,8 +20,6 @@ public class PaddleMovement : MonoBehaviour
     {
         _paddle = GetComponent<Paddle>();
     }
-
-   
 
     void FixedUpdate()
     {
@@ -36,7 +35,16 @@ public class PaddleMovement : MonoBehaviour
         Vector3 newScale = new Vector3(_player.transform.localScale.x, _paddle.Size, _player.transform.localScale.z);
         _player.transform.localScale = newScale;
     
-        float targetSpeed = _input.InputY * (_paddle.Speed * 20);
+        float targetSpeed;
+        
+        if (_playerInput.isActiveAndEnabled)
+        {
+            targetSpeed = _playerInput.InputY * (_paddle.Speed * 20);
+        }
+        else
+        {
+            targetSpeed = _aiInput.InputY * (_paddle.Speed * 20);
+        }
         
         _currentSpeed = Mathf.MoveTowards(_currentSpeed, targetSpeed, (_paddle.Acceleration * 100) * Time.deltaTime);
         
@@ -60,5 +68,21 @@ public class PaddleMovement : MonoBehaviour
         // Calculate the velocity
         Vector3 velocity = (_player.transform.position - _lastPosition) / Time.deltaTime;
         return velocity;
+    }
+    
+    private void OnEnable()
+    {
+        UIManager.RestartGameEvent += ResetLocation;
+    }
+    
+    private void OnDisable()
+    {
+        UIManager.RestartGameEvent -= ResetLocation;
+    }
+
+    private void ResetLocation()
+    {
+        transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+        _currentSpeed = 0;
     }
 }
