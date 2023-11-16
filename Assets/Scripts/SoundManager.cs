@@ -164,19 +164,11 @@ public class SoundManager : MonoBehaviour
     }
     public enum Sounds  //add sound type here, add at the bottom of the list
     {
-        GameBGM,
-        MainMenuBGM,
-        EnemyHit,
-        EnergyOrbCollect,
-        WeaponFire,
-        PlayerHurt,
-        LevelUp,
-        PermanentUpgradeStation,
-        PlayerDeath,
-        ReloadStart,
-        ReloadContinue,
-        Steps,
-        XPCollect,
-        GunReady
+        GameBgm,
+        UIHighlight,
+        UIClick,
+        BallHit,
+        GameOver,
+        Goal
     }
 }

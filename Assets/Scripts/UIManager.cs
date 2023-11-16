@@ -47,6 +47,7 @@ public class UIManager : MonoBehaviour
 
     private void ShowWinnerPanel(int player)
     {
+        SoundManager.Instance.PlayOnce(SoundManager.Sounds.GameOver);
         _winnerTextHolder.SetActive(true);
         _winnerText.text = $"PLAYER {player} WINS";
         StartCoroutine(ShowForSeconds(_clickAnywhereHolder, 3));
@@ -83,6 +84,16 @@ public class UIManager : MonoBehaviour
     {
         LoadMainMenuEvent?.Invoke();
         Time.timeScale = 1f;
+    }
+    
+    public void PlayUIHighlightSound()
+    {
+        SoundManager.Instance.PlayOnce(SoundManager.Sounds.UIHighlight);
+    }
+    
+    public void PlayUIClickSound()
+    {
+        SoundManager.Instance.PlayOnce(SoundManager.Sounds.UIClick);
     }
     
     

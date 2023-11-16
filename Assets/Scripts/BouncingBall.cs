@@ -93,6 +93,11 @@ public class BouncingBall : MonoBehaviour
             {
                 transform.position = new Vector2(transform.position.x > max ? max : min, transform.position.y);
             }
+            
+            if (!SoundManager.Instance.SoundSfx.isPlaying)
+            {
+                SoundManager.Instance.PlayOnce(SoundManager.Sounds.BallHit);
+            }
         }
     }
 
@@ -137,6 +142,12 @@ public class BouncingBall : MonoBehaviour
             {
                 transform.position = new Vector2(transform.position.x > player.position.x ? player.position.x + player.localScale.x / 2 + 0.5f : player.position.x - player.localScale.x / 2 - 0.5f, transform.position.y);
             }
+
+            if (!SoundManager.Instance.SoundSfx.isPlaying)
+            {
+                SoundManager.Instance.PlayOnce(SoundManager.Sounds.BallHit);
+            }
+            
         }
     }
 

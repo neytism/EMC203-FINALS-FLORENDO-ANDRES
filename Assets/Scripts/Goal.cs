@@ -16,6 +16,7 @@ public class Goal : MonoBehaviour
         {
             _ball.ResetBall();
             _paddle.IncreaseScore();
+            SoundManager.Instance.PlayOnce(SoundManager.Sounds.Goal);
         }
     }
     

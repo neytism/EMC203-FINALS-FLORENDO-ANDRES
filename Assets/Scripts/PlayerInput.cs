@@ -27,7 +27,7 @@ public class PlayerInput : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            EscapeKeyPressedEvent?.Invoke();
+            if(GetComponent<Paddle>().PlayerNumber == 1 ) EscapeKeyPressedEvent?.Invoke();
         }
         
         if (Input.GetKey(moveUpKey))
