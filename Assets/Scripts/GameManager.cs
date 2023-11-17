@@ -30,10 +30,13 @@ public class GameManager : MonoBehaviour
     #endregion
     //game prep
     public static event Action<int> SetDifficultyEvent;
+    public static event Action<int> SetBallSpeedEvent;
     public static event Action<int> SetNumberOfPlayerEvent;
     public static event Action GameReadyEvent;
     
     private int numberOfPlayer = 1;
+    private int difficulty = 1;
+    private int ballSpeed = 1;
 
     public int NumberOfPlayer
     {
@@ -46,14 +49,20 @@ public class GameManager : MonoBehaviour
         get => difficulty;
         set => difficulty = value;
     }
+    
+    public int BallSpeed
+    {
+        get => ballSpeed;
+        set => ballSpeed = value;
+    }
 
-    private int difficulty = 1;
     
     //game
     public static event Action<int> ShowWinnerEvent;
     [SerializeField] private int _maxScore = 10;
     private int player1Score;
     private int player2Score;
+    public bool isEffectOn = true;
 
     private void OnEnable()
     {
@@ -61,6 +70,7 @@ public class GameManager : MonoBehaviour
         Paddle.UpdateScoreEvent += UpdateScoreEvent;
         UIManager.RestartGameEvent += RestartGame;
         UIManager.LoadMainMenuEvent += LoadMainMenu;
+        MainMenu.ToggleEffectEvent += ToggleEffect;
     }
     
     private void OnDisable()
@@ -69,6 +79,7 @@ public class GameManager : MonoBehaviour
         Paddle.UpdateScoreEvent -= UpdateScoreEvent;
         UIManager.RestartGameEvent -= RestartGame;
         UIManager.LoadMainMenuEvent -= LoadMainMenu;
+        MainMenu.ToggleEffectEvent -= ToggleEffect;
     }
 
     private void UpdateScoreEvent(int player, int score)
@@ -118,12 +129,20 @@ public class GameManager : MonoBehaviour
         difficulty = dif;
     }
 
+    public void ToggleEffect(bool isOn)
+    {
+        isEffectOn = isOn;
+    }
+
     private void SetGameSettings()
     {
         SetNumberOfPlayerEvent?.Invoke(numberOfPlayer);
+        SetBallSpeedEvent?.Invoke(ballSpeed);
         SetDifficultyEvent?.Invoke(difficulty);
         GameReadyEvent?.Invoke();
     }
+    
+    
 
     public void LoadGame()
     {

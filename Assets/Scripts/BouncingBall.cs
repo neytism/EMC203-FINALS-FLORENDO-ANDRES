@@ -7,6 +7,7 @@ using Random = UnityEngine.Random;
 public class BouncingBall : MonoBehaviour
 {
     public static event Action GameLoaded;
+    public static event Action<bool> IsBallCDUpdateEvent;
     public float speed = 5f;
     
     public float angleLimitY = 0.1f;
@@ -29,12 +30,14 @@ public class BouncingBall : MonoBehaviour
     {
         GameManager.GameReadyEvent += StartBounce;
         UIManager.RestartGameEvent += ResetBall;
+        GameManager.SetBallSpeedEvent += SetBallSpeed;
     }
     
     private void OnDisable()
     {
         GameManager.GameReadyEvent -= StartBounce;
         UIManager.RestartGameEvent -= ResetBall;
+        GameManager.SetBallSpeedEvent -= SetBallSpeed;
     }
     private void Start()
     {
@@ -162,23 +165,59 @@ public class BouncingBall : MonoBehaviour
             direction.x = Mathf.Sign(direction.x) * angleLimitX;
         }
     }
+    
 
     IEnumerator BallCountDown()
     {
         yield return new WaitForSeconds(3);
         RandomizeDirection();
+        IsBallCDUpdateEvent?.Invoke(false);
         _canMove = true;
     }
     
-   
-
     public void ResetBall()
     {
         _canMove = false;
         transform.position = Vector3.zero;
+        IsBallCDUpdateEvent?.Invoke(true);
         StartCoroutine(BallCountDown());
     }
-    
 
+    private void SetBallSpeed(int x)
+    {
+        
+        switch (x)
+        {
+            case 1 :
+                speed = 25f;
+                break;
+            case 2 :
+                speed = 35;
+                break;
+            case 3 :
+                speed = 45;
+                break;
+            default :
+                speed = 25f;
+                break;
+        }
+
+        ToggleTrail();
+    }
+
+
+    private void ToggleTrail()
+    {
+        if (GameManager.Instance.isEffectOn)
+        {
+            GetComponent<ParticleSystem>().Play();
+        }
+        else
+        {
+            GetComponent<ParticleSystem>().Stop();
+        }
+    }
+    
+    
 
 }

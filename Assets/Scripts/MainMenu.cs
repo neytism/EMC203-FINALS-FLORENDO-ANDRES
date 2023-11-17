@@ -5,9 +5,38 @@ using UnityEngine;
 
 public class MainMenu : MonoBehaviour
 {
+    public static event Action<bool> ToggleEffectEvent; 
+    [SerializeField] private GameObject _mutedIcon;
+    [SerializeField] private GameObject _unmutedIcon;
+    [SerializeField] private GameObject _effectOnIcon;
+    [SerializeField] private GameObject _effectOffIcon;
+    public ParticleSystem ballTrail;
+    
     private void Start()
     {
         SoundManager.Instance.PlayLoop(SoundManager.Sounds.GameBgm);
+        
+        if (SoundManager.Instance.SoundSfx.volume == 0f)
+        {
+            _mutedIcon.SetActive(false);
+            _unmutedIcon.SetActive(true);
+        }
+        else
+        {
+            _mutedIcon.SetActive(true);
+            _unmutedIcon.SetActive(false);
+        }
+        
+        if (GameManager.Instance.isEffectOn)
+        {
+            _effectOffIcon.SetActive(false);
+            _effectOnIcon.SetActive(true);
+        }
+        else
+        {
+            _effectOffIcon.SetActive(true);
+            _effectOnIcon.SetActive(false);
+        }
     }
 
     public void SetNumbersOfPlayer(int numOfPlayers)
@@ -20,6 +49,10 @@ public class MainMenu : MonoBehaviour
         FindObjectOfType<GameManager>().Difficulty = difficulty;
     }
 
+    public void SetBallSpeed(int speed)
+    {
+        FindObjectOfType<GameManager>().BallSpeed = speed;
+    }
     public void LoadGame()
     {
         SoundManager.Instance.StopPlayingBGM(SoundManager.Sounds.GameBgm);
@@ -50,5 +83,20 @@ public class MainMenu : MonoBehaviour
     {
         SoundManager.Instance.SoundSfx.volume = 1f;
         SoundManager.Instance.SoundBGMusic.volume = 1f;
+    }
+
+    public void ToggleEffect(bool isOn)
+    {
+        ToggleEffectEvent?.Invoke(isOn);
+        
+        if (isOn)
+        {
+            ballTrail.Play();
+        }
+        else
+        {
+            ballTrail.Stop();
+        }
+        
     }
 }

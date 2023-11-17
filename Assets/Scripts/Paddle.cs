@@ -36,18 +36,40 @@ public class Paddle : MonoBehaviour
 
     private void OnEnable()
     {
+        _size = 5;
         UIManager.RestartGameEvent += ResetScore;
+        GameManager.SetDifficultyEvent += SetIntelligence;
     }
     
     private void OnDisable()
     {
         UIManager.RestartGameEvent -= ResetScore;
+        GameManager.SetDifficultyEvent -= SetIntelligence;
     }
 
     private void ResetScore()
     {
         _score = 0;
         UpdateScoreEvent?.Invoke(_playerNumber,_score);
+    }
+    
+    private void SetIntelligence(int difficulty)
+    {
+        switch (difficulty)
+        {
+            case 1:
+                _size = 7;
+                break;
+            case 2:
+                _size = 6;
+                break;
+            case 3:
+                _size = 5;
+                break;
+            default:
+                _size = 5;
+                break;
+        }
     }
     
     

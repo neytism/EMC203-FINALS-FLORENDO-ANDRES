@@ -63,6 +63,7 @@ public class UIManager : MonoBehaviour
     {
         _winnerTextHolder.SetActive(false);
         _clickAnywhereHolder.SetActive(false);
+        _pauseHolder.SetActive(false);
         RestartGameEvent?.Invoke();
     }
 
